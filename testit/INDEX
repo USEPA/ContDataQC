@@ -1,0 +1,4 @@
+assert                  Assertions with an optional message
+has_warning             Check if an R expression produces warnings or
+                        errors
+test_pkg                Run the tests of a package in its namespace

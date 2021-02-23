@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Check if an R expression produces warnings or errors</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for has_warning {testit}"><tr><td>has_warning {testit}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Check if an R expression produces warnings or errors</h2>
+
+<h3>Description</h3>
+
+<p>The two functions <code>has_warning()</code> and <code>has_error()</code> check if an
+expression produces warnings and errors, respectively.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+has_warning(expr)
+
+has_error(expr, silent = !interactive())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>expr</code></td>
+<td>
+<p>an R expression</p>
+</td></tr>
+<tr valign="top"><td><code>silent</code></td>
+<td>
+<p>logical: should the report of error messages be suppressed?</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A logical value.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+has_warning(1 + 1)
+has_warning(1:2 + 1:3)
+
+has_error(2 - 3)
+has_error(1 + "a")
+has_error(stop("err"), silent = TRUE)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>testit</em> version 0.12 <a href="00Index.html">Index</a>]</div>
+</body></html>

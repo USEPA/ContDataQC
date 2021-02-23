@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Assertions with an optional message</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for assert {testit}"><tr><td>assert {testit}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Assertions with an optional message</h2>
+
+<h3>Description</h3>
+
+<p>The function <code>assert()</code> was inspired by <code><a href="../../base/html/stopifnot.html">stopifnot</a>()</code>. It
+emits a message in case of errors, which can be a helpful hint for diagnosing
+the errors (<code>stopifnot()</code> only prints the possibly truncated source code
+of the expressions).
+</p>
+<p>The infix operator <code>%==%</code> is simply an alias of the
+<code><a href="../../base/html/identical.html">identical</a>()</code> function to make it slightly easier and intuitive
+to write test conditions. <code>x %==% y</code> is the same as
+<code>identical(x, y)</code>. When it is used inside <code>assert()</code>, a message
+will be printed if the returned value is not <code>TRUE</code>, to show the
+values of the LHS (<code>x</code>) and RHS (<code>y</code>) via <code><a href="../../utils/html/str.html">str</a>()</code>,
+which can be helpful for you to check why the assertion failed.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+assert(fact, ...)
+
+x %==% y
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>fact</code></td>
+<td>
+<p>a message for the assertions when any of them fails; treated the
+same way as expressions in <code>...</code> if it is not a character string,
+which means you do not have to provide a message to this function</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>an R expression; see Details</p>
+</td></tr>
+<tr valign="top"><td><code>x, y</code></td>
+<td>
+<p>two R objects to be compared</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>For the <code>...</code> argument, it should be a single R expression wrapped in
+<code>{}</code>. This expression may contain multiple sub-expressions. A
+sub-expression is treated as a test condition if it is wrapped in <code>()</code>
+(meaning its value will be checked to see if it is a logical vector
+containing any <code>FALSE</code> values) , otherwise it is evaluated in the normal
+way and its value will not be checked. If the value of the last
+sub-expression is logical, it will also be treated as a test condition.
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>assert()</code>, invisible <code>NULL</code> if all expressions
+returned <code>TRUE</code>, otherwise an error is signaled and the user-provided
+message is emitted. For <code>%==%</code>, <code>TRUE</code> or <code>FALSE</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The internal implementation of <code>assert()</code> is different with the
+<code>stopifnot()</code> function in R <span class="pkg">base</span>: (1) the custom message
+<code>fact</code> is emitted if an error occurs; (2) <code>assert()</code> requires the
+logical values to be non-empty (<code>logical(0)</code> will trigger an error);
+(3) if <code>...</code> contains a compound expression in <code>{}</code> that returns
+<code>FALSE</code> (e.g., <code>if (TRUE) {1+1; FALSE}</code>), the first and the last
+but one line of the source code from <code><a href="../../base/html/deparse.html">deparse</a>()</code> are printed in
+the error message, otherwise the first line is printed; (4) the arguments
+in <code>...</code> are evaluated sequentially, and <code>assert()</code> will signal
+an error upon the first failed assertion, and will ignore the rest of
+assertions.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## The first way to write assertions -------------------
+
+assert("T is bad for TRUE, and so is F for FALSE", {
+    T = FALSE
+    F = TRUE
+    (T != TRUE)  # note the parentheses
+    (F != FALSE)
+})
+
+assert("A Poisson random number is non-negative", {
+    x = rpois(1, 10)
+    (x &gt;= 0)
+    (x &gt; -1)  # () is optional because it's the last expression
+})
+
+
+## The second way to write assertions --------------------
+
+assert("one equals one", 1 == 1)
+assert("seq and : produce equal sequences", seq(1L, 10L) == 1L:10L)
+assert("seq and : produce identical sequences", identical(seq(1L, 10L), 1L:10L))
+
+# multiple tests
+T = FALSE
+F = TRUE
+assert("T is bad for TRUE, and so is F for FALSE", T != TRUE, F != FALSE)
+
+# a mixture of tests
+assert("Let's pray all of them will pass", 1 == 1, 1 != 2, letters[4] == "d", 
+    rev(rev(letters)) == letters)
+
+# logical(0) cannot pass assert(), although stopifnot() does not care
+try(assert("logical(0) cannot pass", 1 == integer(0)))
+stopifnot(1 == integer(0))  # it's OK!
+
+# a compound expression
+try(assert("this if statement returns TRUE", if (TRUE) {
+    x = 1
+    x == 2
+}))
+
+# no message
+assert(!FALSE, TRUE, is.na(NA))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>testit</em> version 0.12 <a href="00Index.html">Index</a>]</div>
+</body></html>
