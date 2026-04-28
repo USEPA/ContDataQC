@@ -21,6 +21,12 @@ cat(paste0("Last Update: ",Sys.time()))
 
 # Version History
 
+# v2.1.0.9004
+2026-04-28
+
+* fix: Update Global to account for change in config.ORIG.R
+    + Add environment statement that was commented out in the last commit
+
 # v2.1.0.9003
 2025-10-03
 

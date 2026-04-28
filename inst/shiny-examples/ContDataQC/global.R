@@ -23,7 +23,7 @@ library(shinyalert)
 # Sys.setenv(PATH = paste(Sys.getenv("PATH"), "C:\\Rtools\\bin", sep = ";"))
 
 # Version Number
-version <- "2.0.7.9049"
+version <- "2.1.0.9004"
 
 #Maximum individual file size that can be uploaded is 70 MB
 options(shiny.maxRequestSize = 70 * 1024^2)
@@ -36,6 +36,8 @@ dataTemplate <- read.csv(file = "continuous_data_template_2017_11_15.csv"
 # Load default config if not present
 # 2020-10-02 (ContDataQC.R), added to global 2022-12-22
 if (exists("ContData.env", mode = "environment") == FALSE) {
+  # add env to ensure it is present (commented out in file, 20260428)
+  ContData.env <- new.env(parent = emptyenv())
   source(system.file(package = "ContDataQC", "extdata", "config.ORIG.R")
          , local = TRUE)
 }## exists ~ END
